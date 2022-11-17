@@ -12,6 +12,5 @@ for line in my_lista:
         value=float(elements[1])
         values.append(value)
 
-risultato=sum_csv(values)
-print("risultato è:{}".format(risultato))
+
     
