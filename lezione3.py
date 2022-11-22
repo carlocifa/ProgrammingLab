@@ -10,5 +10,5 @@ def sum_csv(file_name):
         if elements[0]!='Date':
             date=elements[0]
             value=elements[1]
-    values.append(value)
+    values.append(float(value))
     my_file.close()
