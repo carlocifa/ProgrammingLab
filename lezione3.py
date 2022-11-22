@@ -7,7 +7,9 @@ def sum_csv(file_name):
             date=elements[0]
             value=elements[1]
             values.append(value)
+            file_name.close()
     prezzo=0
     for item in values:
         prezzo=prezzo + item
     return prezzo
+sum_csv('file_name')
