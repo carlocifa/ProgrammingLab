@@ -2,7 +2,7 @@ def sum_csv(file_name):
     values=[]
     prezzo=0
     for item in file_name:
-        prezzo=prezzo + item
+        prezzo= prezzo + item
     return prezzo
     my_file=open('shampoo_sales.csv', 'r')
     for line in my_file:
@@ -12,4 +12,3 @@ def sum_csv(file_name):
             value=elements[1]
     values.append(value)
     my_file.close()
-sum_csv('file_name')
