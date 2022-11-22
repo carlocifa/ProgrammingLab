@@ -12,4 +12,3 @@ def sum_csv(file_name):
             value=elements[1]
     values.append(value)
     file_name.close()
-sum_csv('file_name')
