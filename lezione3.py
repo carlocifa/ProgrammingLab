@@ -13,3 +13,4 @@ def sum_csv(file_name):
     values.append(float(value))
     my_file.close()
 sum_csv('file_name')
+
