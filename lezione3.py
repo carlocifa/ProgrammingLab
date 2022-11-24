@@ -1,16 +1,14 @@
-def sum_csv(file_name):
-    values=[]
-    prezzo=0
-    for item in file_name:
-        prezzo= prezzo + item
-    return prezzo
-    my_file=open('shampoo_sales.csv', 'r')
-    for line in my_file:
+def sum_csv(nome_file):
+    values=[] 
+    file=open(nome_file,'r') 
+    for line in file:
         elements=line.split(',')
         if elements[0]!='Date':
-            date=elements[0]
             value=elements[1]
-    values.append(float(value))
-    my_file.close()
-sum_csv('file_name')
+            values.append(float(value))
+    file.close()
+    if(len(values)==0):
+        return None
+    else:
+        return sum(values)
 
