@@ -1,23 +1,16 @@
 class CSVFile():
     def __init__(self, name):
         self.name=name
-    def get_data(self, name):
-        values=[]
-        lista=open(lista_liste.name, 'r')
-        for line in lista:
-            elements=line.split(',')
-            if elements[0] != 'Date':
-                value=elements[1]
-                values.append(float(value))
-                file.close()
-        if(len(values)==0):
-            return None
-        else:
-            print(values)
+    def get_data(self):
+        elements=[]
+        my_file=open(self.name, 'r')
+        for line in my_file:
+            if line!='Date,Sales\n':
+                elements.append(line)
+        my_file.close()
+        return elements
+            
                 
-lista_liste=CSVFile('shampoo_sales.csv')
-print(name.name)
-print(name)
-name.get_data(name)
-
-        
+csv_file = CSVFile("shampoo_sales.csv")            # in questo modo istanzi l'oggetto csv_file, passandogli come argomento il nome del file
+data = csv_file.get_data()                                    # chiami il metodo get_data dell'oggetto e salvi l'output nella variabile data
+print(data)
