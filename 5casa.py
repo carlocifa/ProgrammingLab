@@ -23,6 +23,6 @@ class CSVFile():
                 values.append([date,value])
         my_file.close()
         return values
-mio_file = CSVFile(name='shampoo_sales.csv')
-print('Nome del file: "{}"'.format(mio_file.name))
-print('Dati contenuti nel file: "{}"'.format(mio_file.get_data()))
+#mio_file = CSVFile(name='shampoo_sales.csv')
+#print('Nome del file: "{}"'.format(mio_file.name))
+#print('Dati contenuti nel file: "{}"'.format(mio_file.get_data()))
