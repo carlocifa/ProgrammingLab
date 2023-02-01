@@ -1,7 +1,7 @@
 class ExamException(Exception):
         pass
 
-class CSVFile():
+class CSVTimeSeriesFile():
     def __init__(self,name):
         self.name=name
         self.can_read=True
@@ -26,42 +26,43 @@ class CSVFile():
                 values.append([date,value])
         my_file.close()
         return values
-    def compute_daily_max_difference(self, time_series):
-        lista_epoch=[]
-        lista_temp=[]
-        lista_diff=[]
-        for lista in time_series:
-            epoch=lista[0]
-            lista_epoch.append(epoch)
-            temp=lista[1]
-            lista_temp.append(temp)
-        for i in range(0, len(lista_epoch)-1):
-            if i==0:
-                inizio_giorno=lista_epoch[i]
-            if lista_epoch[i]%86400==0:
-                inizio_giorno=lista_epoch[i]
-            lista_giorni=[] 
-            while lista_epoch[i] - inizio_giorno < 86400 and i < len(lista_epoch):
-                lista_giorni.append(lista_temp[i])
-                i=i+1
-            minimo=min(lista_giorni)
-            massimo=max(lista_giorni)
-            differenza=massimo-minimo
-            lista_diff.append(differenza)
-                
-                
 
+def compute_daily_max_difference(self):
+    lista_epoch=[]
+    lista_temp=[]
+    lista_diff=[]
+    for lista in self:
+        epoch=lista[0]
+        lista_epoch.append(epoch)
+        temp=lista[1]
+        lista_temp.append(temp)
+    x=0
+    lista_giorni_epoch=[]
+    for i in range(0, len(lista_epoch)):
+        if i==0:
+            inizio_giorno=lista_epoch[i]-(lista_epoch[i]%86400)
+        if lista_epoch[i]- inizio_giorno >=86400:
+            x=x+1
+            lista_giorni_epoch.append(i)
+            inizio_giorno=lista_epoch[i]-(lista_epoch[i]%86400)
+    lista_giorni_epoch.append(len(lista_epoch))
+    s=0
+    for i in range(0, x+1):
+        lista_giorni_temp=[]
+        while s < lista_giorni_epoch[i]:
+           lista_giorni_temp.append(lista_temp[s])
+           s+=1
+        differenza=max(lista_giorni_temp)-min(lista_giorni_temp)
+        differenza=round(differenza, 3)
+        lista_diff.append((differenza))
+    return lista_diff     
             
-class CSVTimeSeriesFile(CSVFile):
-    def get_data(self):
-        string_data = super().get_data()
-        return string_data
+
        
 
 
-time_series_file = CSVFile(name='data.csv')
+time_series_file = CSVTimeSeriesFile(name='data.csv')
 time_series = time_series_file.get_data()
-#print('{}'.format(time_series))
-time_series_file.compute_daily_max_difference(time_series)
-
-
+print('lista epoch e temperatura:\n{}'.format(time_series))
+compute_daily_max_difference(time_series)
+print('lista differenze massime:\n{}'.format(compute_daily_max_difference(time_series)))
