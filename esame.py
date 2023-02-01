@@ -8,52 +8,66 @@ class CSVTimeSeriesFile():
         try:
             myfile=open(self.name, 'r')
             myfile.readline()
-        except Exception as e:
+        except:
             self.can_read=False
-            print('Errore in apertura: "{}"'.format(e))
+            
     def get_data(self):
         if not self.can_read:
-            print('Errore file non aperto o illeggibile')
-            return None
+            raise ExamException('Errore file non aperto o illeggibile')
         else:
             values=[]
-        my_file=open(self.name, 'r')
-        for line in my_file:
-            elements=line.split(',')
-            if elements[0]!='epoch':
-                date=int(elements[0])
-                value=float(elements[1].replace('\n',''))
-                values.append([date,value])
-        my_file.close()
-        return values
+            l_epoch=[] #lista di tutte le epoch
+            my_file=open(self.name, 'r')
+            for line in my_file:
+                elements=line.split(',')
+                if elements[0]!='epoch':
+                    s=True
+                    try:
+                        epoch=int(elements[0])
+                        temp=float(elements[1].replace('\n',''))
+                    except:
+                        s=False
+                    if s==True:
+                        values.append([epoch,temp]) 
+                        l_epoch.append(epoch)
+            for i in range(1, len(l_epoch)):
+                if l_epoch[i-1] >= l_epoch[i]:
+                    raise ExamException('Errore epoch non ordinate o duplicate') 
+                
+                
+            my_file.close()
+            return values
 
 def compute_daily_max_difference(self):
-    lista_epoch=[]
-    lista_temp=[]
-    lista_diff=[]
+    lista_epoch=[] #lista di tutte le epoch
+    lista_temp=[] #lista di tutte le temperature
+    lista_diff=[] # lista finale di tutte le differenze
     for lista in self:
         epoch=lista[0]
         lista_epoch.append(epoch)
         temp=lista[1]
         lista_temp.append(temp)
-    x=0
-    lista_giorni_epoch=[]
+    x=0 #numero di giorni diversi in data
+    lista_giorni_epoch=[] # lista delle posizioni i di data dove inizia un nuovo giorno 
     for i in range(0, len(lista_epoch)):
         if i==0:
             inizio_giorno=lista_epoch[i]-(lista_epoch[i]%86400)
         if lista_epoch[i]- inizio_giorno >=86400:
-            x=x+1
+            x+=1
             lista_giorni_epoch.append(i)
             inizio_giorno=lista_epoch[i]-(lista_epoch[i]%86400)
-    lista_giorni_epoch.append(len(lista_epoch))
-    s=0
+    lista_giorni_epoch.append(len(lista_epoch)) #append ultimo elemento i di data
+    s=0 #elementi di data
     for i in range(0, x+1):
-        lista_giorni_temp=[]
+        lista_giorni_temp=[] #lista di tutte le temperature in un solo giorno
         while s < lista_giorni_epoch[i]:
            lista_giorni_temp.append(lista_temp[s])
            s+=1
-        differenza=max(lista_giorni_temp)-min(lista_giorni_temp)
-        differenza=round(differenza, 3)
+        if len(lista_giorni_temp)==1:
+            differenza = None
+        else:
+            differenza=max(lista_giorni_temp)-min(lista_giorni_temp)
+            differenza=round(differenza, 3)
         lista_diff.append((differenza))
     return lista_diff     
             
@@ -63,6 +77,6 @@ def compute_daily_max_difference(self):
 
 time_series_file = CSVTimeSeriesFile(name='data.csv')
 time_series = time_series_file.get_data()
-print('lista epoch e temperatura:\n{}'.format(time_series))
+#print('lista epoch e temperatura:\n{}'.format(time_series))
 compute_daily_max_difference(time_series)
-print('lista differenze massime:\n{}'.format(compute_daily_max_difference(time_series)))
+#print('lista differenze massime:\n{}'.format(compute_daily_max_difference(time_series)))
