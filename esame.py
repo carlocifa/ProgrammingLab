@@ -30,9 +30,12 @@ class CSVTimeSeriesFile():
                     if s==True:
                         values.append([epoch,temp]) 
                         l_epoch.append(epoch)
+            if len(values)==0:
+                raise ExamException('Errore file vuoto')
             for i in range(1, len(l_epoch)):
                 if l_epoch[i-1] >= l_epoch[i]:
                     raise ExamException('Errore epoch non ordinate o duplicate') 
+            
                 
                 
             my_file.close()
